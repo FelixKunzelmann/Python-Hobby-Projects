@@ -354,7 +354,7 @@ class Slider:
 
         # Draw knob
         pygame.draw.circle(
-            screen, colors['CYAN'], (self.knob_x, self.knob_y), 8)
+            screen, colors['GRAY'], (self.knob_x, self.knob_y), 8)
         if self.dragging:
             pygame.draw.circle(
                 screen, colors['WHITE'], (self.knob_x, self.knob_y), 8, 2)
@@ -390,7 +390,7 @@ class GasVisualizer:
         self.offset_y = 50
 
         # Control panel area starts at this y coordinate
-        self.control_area_y = 50 + \
+        self.control_area_y = 25 + \
             int(simulation.box.height * self.scale_y) + 20
 
         # Colors
@@ -412,7 +412,7 @@ class GasVisualizer:
 
         # Create sliders in the control area
         self.temp_slider = Slider(
-            x=60, y=self.control_area_y, width=250, height=20,
+            x=window_width - 400, y=self.control_area_y + 40, width=250, height=20,
             min_val=10.0, max_val=5000.0,
             initial_val=simulation.temperature,
             label="Temperature",
@@ -420,7 +420,7 @@ class GasVisualizer:
         )
 
         self.particle_slider = Slider(
-            x=60, y=self.control_area_y + 60, width=250, height=20,
+            x=window_width - 400, y=self.control_area_y + 40 + 60, width=250, height=20,
             min_val=10, max_val=1000,
             initial_val=len(simulation.particles),
             label="Particles",
@@ -527,11 +527,12 @@ class GasVisualizer:
         left_margin = 10
 
         # Title at top of control area
-        title = self.font_large.render("Ideal Gas Simulation", True, self.CYAN)
+        title = self.font_large.render(
+            "Ideal Gas Simulation", True, self.WHITE)
         self.screen.blit(title, (left_margin, 10))
 
-        # Statistics below the sliders
-        stats_y = self.control_area_y + 130
+        # Statistics on the left side of control area
+        stats_y = self.control_area_y + 20
         stat_texts = [
             f"Time: {stats['time']:.2f}s",
             f"Particles: {stats['num_particles']}  |  Avg Speed: {stats['average_speed']:.2f}",
@@ -548,7 +549,8 @@ class GasVisualizer:
         mode_text = "PAUSED" if self.paused else "RUNNING"
         mode_color = self.RED if self.paused else self.GREEN
         mode = self.font_small.render(mode_text, True, mode_color)
-        self.screen.blit(mode, (self.window_width - 120, self.control_area_y))
+        self.screen.blit(mode, (self.window_width -
+                         120, self.control_area_y + 20))
 
         # Instructions at the very bottom
         instructions = self.font_small.render(
