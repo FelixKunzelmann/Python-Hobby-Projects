@@ -344,9 +344,14 @@ class Slider:
 
     def draw(self, screen: pygame.Surface, font: pygame.font.Font, colors: dict):
         """Draw slider on screen."""
-        # Draw label
+        # Draw label (show integer for particle counts)
+        if "particle" in self.label.lower():
+            display_val = f"{int(self.value)}"
+        else:
+            display_val = f"{self.value:.2f}"
+
         label_text = font.render(
-            f"{self.label}: {self.value:.2f}", True, colors['WHITE'])
+            f"{self.label}: {display_val}", True, colors['WHITE'])
         screen.blit(label_text, (self.x, self.y - 25))
 
         # Draw track
@@ -465,7 +470,7 @@ class GasVisualizer:
                 particle.vel.x *= scale_factor
                 particle.vel.y *= scale_factor
 
-    def on_particle_count_change(self, new_count: float):
+    def on_particle_count_change(self, new_count: int):
         """Callback when particle count slider changes."""
         new_count = int(new_count)
         current_count = len(self.sim.particles)
@@ -648,7 +653,7 @@ def main():
 
     # Create simulation
     width, height = 100.0, 80.0
-    num_particles = 500
+    num_particles = 50
     sim = IdealGasSimulation(width, height, num_particles,
                              particle_radius=0.5,
                              particle_mass=1.0,
