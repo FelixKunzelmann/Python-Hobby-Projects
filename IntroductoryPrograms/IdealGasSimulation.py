@@ -669,7 +669,7 @@ def main():
         # Visual mode
         print("Starting visual simulation...")
         visualizer = GasVisualizer(sim, window_width=1000, window_height=800)
-        visualizer.run(max_steps=2000)
+        visualizer.run(max_steps=5000)
     else:
         # Console mode
         num_steps = 500
