@@ -51,13 +51,14 @@ class QuantumTunnelSimulator:
         barrier[mask] = height
         return barrier
 
-    def _create_gaussian_packet(self, x0=-5, sigma=0.5, k0=3.0):
+    def _create_gaussian_packet(self, x0=-5, sigma=0.5, k0=5.0):
         envelope = np.exp(-(self.x - x0)**2 / (2 * sigma**2))
         wave = np.exp(1j * k0 * self.x)
         psi = envelope * wave
         psi /= np.sqrt(np.sum(np.abs(psi)**2) * self.dx)
         return psi
 
+    # The discretized kinetic energy operator using finite difference method. The value of the wavefunction at the boundaries is therfore set to zero, which results in seaming refections at the boundaries for too long simulation times. This is an unphysical effect.
     def _create_kinetic_operator(self):
         diag_main = -2.0 / (self.dx**2) * np.ones(self.num_points)
         diag_off = 1.0 / (self.dx**2) * np.ones(self.num_points - 1)
@@ -89,7 +90,7 @@ class QuantumTunnelSimulator:
                 self.times.append(step_num * self.dt)
                 self.psi_history.append(self.psi.copy())
                 self.prob_history.append(np.abs(self.psi)**2)
-        print("Simulation complete!")
+        print("Calculation complete!")
 
     def calculate_transmission(self):
         barrier_center = np.mean(self.x[np.abs(self.potential) > 0.1])
@@ -171,7 +172,7 @@ class QuantumTunnelSimulator:
         # axes[2, 1].axis('off')
 
         plt.tight_layout()
-        plt.show()
+        # plt.show()  # Remove blocking show
 
     def create_animation(self, save_path=None):
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8),
@@ -216,7 +217,7 @@ class QuantumTunnelSimulator:
                             interval=50, blit=False, repeat=True)
         if save_path:
             ani.save(save_path, dpi=100)
-        plt.show()
+        # plt.show()  # Remove blocking show
         return ani
 
 
@@ -227,9 +228,9 @@ def main():
     simulator = QuantumTunnelSimulator(
         x_min=-30, x_max=50,
         num_points=1024,
-        barrier_height=0.5,
-        barrier_width=8.0,
-        barrier_center=3.0,
+        barrier_height=1.2,
+        barrier_width=2.0,
+        barrier_center=0.0,
         dt=0.01,
         t_max=20
     )
@@ -237,17 +238,14 @@ def main():
     print("\n" + "-"*60)
     print("RESULTS")
     print("-"*60)
-    transmissions = simulator.calculate_transmission()
-    print(f"Initial transmission probability: {transmissions[0]:.4f}")
-    print(f"Final transmission probability: {transmissions[-1]:.4f}")
-    print(
-        f"Tunneling events detected: {transmissions[-1] - transmissions[0] > 0.01}")
     print("\nGenerating static overview plot...")
     simulator.plot_static_overview()
     print("\nGenerating animation...")
-    simulator.create_animation()
+    ani = simulator.create_animation()
+    print("\nDisplaying plots...")
+    plt.show()  # Show both figures at once
     print("\n" + "="*60)
-    print("Simulation completed successfully!")
+    print("Calculation completed successfully!")
     print("="*60 + "\n")
 
 
