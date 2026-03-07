@@ -3,7 +3,6 @@ solution: int
 choice: int
 
 solution = random.randint(0, 100)
-print(solution)
 print("Guess a value by typing a Number between 0 and 100")
 unsolved = True
 while unsolved:
