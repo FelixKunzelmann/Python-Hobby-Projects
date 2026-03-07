@@ -20,6 +20,7 @@ while playing:
         dice.roll()
         print(f"Dice 1: {dice.dice1}")
         print(f"Dice 2: {dice.dice2}")
+        print(f"Total: {dice.dice1 + dice.dice2}")
     elif choice == "n":
         playing = False
         print("Okay, maybe next time!")
