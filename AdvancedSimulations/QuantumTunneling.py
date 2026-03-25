@@ -228,9 +228,9 @@ def main():
     simulator = QuantumTunnelSimulator(
         x_min=-30, x_max=50,
         num_points=1024,
-        barrier_height=1.2,
-        barrier_width=2.0,
-        barrier_center=0.0,
+        barrier_height=.2,
+        barrier_width=8.0,
+        barrier_center=3.0,
         dt=0.01,
         t_max=20
     )
