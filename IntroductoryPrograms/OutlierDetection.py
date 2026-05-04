@@ -23,6 +23,3 @@ def test_output_power():
         f"[{POWER_SPEC['min_dBm']}, {POWER_SPEC['max_dBm']}] dBm"
     )
     print(f"PASS: Mean output power = {mean_power:.2f} dBm")
-
-
-test_output_power()
